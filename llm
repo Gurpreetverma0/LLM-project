@@ -1,0 +1,95 @@
+# -------------------------------------------------------------
+# AI CAREER ADVISOR USING PROMPT ENGINEERING — GEMINI API VERSION
+# Single-file Python script
+# -------------------------------------------------------------
+
+import google.generativeai as genai
+
+# Add your Gemini API Key
+genai.configure(api_key="AIzaSyCaDrpblFoT9U5FX3HA2Uc7cpT-Uy8am_w ")
+
+
+# -------------------------------------------------------------
+# 1. ROLE-BASED PROMPT
+# -------------------------------------------------------------
+role_prompt = """
+You are an AI Career Advisor. Your job is to provide accurate, beginner-friendly,
+and confidence-boosting career advice. You avoid assumptions, avoid hallucinations,
+and respond with clarity and actionable steps. If the query is unclear, ask questions.
+"""
+
+
+# -------------------------------------------------------------
+# 2. INSTRUCTION-BASED PROMPT
+# -------------------------------------------------------------
+instruction_prompt = """
+Your task is to guide the user about careers, learning paths, resume building,
+skills improvement, job opportunities, and interview preparation.
+Provide structured, realistic, and motivational advice.
+"""
+
+
+# -------------------------------------------------------------
+# 3. FEW-SHOT EXAMPLES
+# -------------------------------------------------------------
+few_shot_examples = """
+Example 1:
+User: I am a 1st-year CS student. What should I learn first?
+Assistant: Start with the fundamentals — C programming, Python basics,
+data structures, and problem-solving. Spend 2–3 months building a solid base
+before moving to web development or AI.
+
+Example 2:
+User: How can I improve my resume?
+Assistant: Use a clean one-page format, add a skills section, highlight
+projects with bullet points, and quantify achievements (e.g., “Improved accuracy by 20%”).
+
+Example 3:
+User: Is cybersecurity a good field?
+Assistant: Yes. It has high demand globally. Start with networking basics,
+Linux commands, OWASP, and tools like Wireshark.
+"""
+
+
+# -------------------------------------------------------------
+# 4. Combined Prompt Function for Gemini
+# -------------------------------------------------------------
+def ask_career_advisor(query):
+    # Combine everything into a single prompt
+    full_prompt = f"""
+{role_prompt}
+
+{instruction_prompt}
+
+{few_shot_examples}
+
+User: {query}
+Assistant:
+"""
+
+    model = genai.GenerativeModel("gemini-2.5-flash")   # Updated to use available model
+    response = model.generate_content(full_prompt)
+    return response.text
+
+
+# -------------------------------------------------------------
+# 5. Test Queries
+# -------------------------------------------------------------
+queries = [
+    "I want to become a data scientist. How should I start?",
+    "What projects should I build for a resume as a beginner?",
+    "Is it necessary to learn DSA for a software engineering job?",
+    "I am confused between AI and cybersecurity. Which one is better?",
+    "My English is weak. How can I prepare for interviews?",
+    "Suggest a career based on my skills: Excel, Python basics, communication."
+]
+
+
+# -------------------------------------------------------------
+# 6. Run Tests
+# -------------------------------------------------------------
+if _name_ == "_main_":
+    for q in queries:
+        print("\nUSER:", q)
+        print("ADVISOR:", ask_career_advisor(q))
+        print("\n" + "-" * 80)
